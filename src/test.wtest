@@ -1,0 +1,73 @@
+import planetas.*
+import personas.*
+import construcciones.*
+import regiones.*
+
+describe "Primera prueba" {							
+	const adele = new Persona(edad = 30, recursos = 100)
+	const sia = new Persona(edad = 40)
+	const zayn = new Persona(edad = 17)
+	const cher = new Persona(edad = 70, recursos = 50)
+	
+	const murallaChina = new Muralla(longitud = 10)
+	const murallaRusa = new Muralla(longitud = 20)
+	const museoLouvre = new Museo(superficieCubierta = 100, indiceDeImportancia = 3)
+	
+	const saturno = new Planeta(habitantes = [adele, sia, zayn, cher],
+								construcciones = [murallaChina, murallaRusa, museoLouvre])		
+//	------------
+	const museoDelPrado = new Museo(superficieCubierta = 50, indiceDeImportancia = 1)
+	
+	const jupiter = new Planeta(habitantes = [adele, zayn],
+								construcciones = [museoDelPrado])
+
+
+	test "La delegacion diplomática de Saturno está formada por tres personas" {
+		assert.equals(3, saturno.delegacionDiplomatica().size())
+	}
+	test "Saturno es valioso" {
+		assert.that(saturno.esValioso())
+	}
+	
+	
+	test "Jupiter no es valioso" {
+		assert.that(!jupiter.esValioso())
+	}
+	test "Luego de hacer que sus habitantes cumplan años, la delegacion diplomatica de Jupiter
+		  está formada por dos personas" {
+		zayn.cumplirAnios()
+		
+		assert.equals(2, jupiter.delegacionDiplomatica().size())
+	}
+}
+
+describe "Más pruebas" {
+	const juancho = new Constructor(edad = 30, cantConstRealizadas = 1, region = montania)
+	const pepito = new Constructor(edad = 30, cantConstRealizadas = 6, region = costa)
+	const tom = new Productor(edad = 20)
+	
+	const mercurio = new Planeta(habitantes = [juancho, pepito, tom])
+	
+	test "Los constructores trabajan bien" {
+		const tiempoJ = 10
+		const tiempoP = 20
+		
+		juancho.trabajar(tiempoJ, mercurio)
+		pepito.trabajar(tiempoP, mercurio)
+		
+		assert.equals(35, juancho.recursos())
+		assert.equals(85, pepito.recursos())
+		
+//		assert.that(mercurio.poseeConstruccion(juancho.construirSegunRegion(tiempoJ)))
+//		assert.that(mercurio.poseeConstruccion(pepito.construirSegunRegion(tiempoP)))
+		
+		assert.equals(2, juancho.cantConstRealizadas())
+		assert.equals(7, pepito.cantConstRealizadas())
+	}
+	
+	test "Los productores trabajan bien" {
+		tom.trabajar(5, mercurio)
+		
+		assert.equals(35, tom.recursos())
+	}
+}
